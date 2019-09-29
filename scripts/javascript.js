@@ -2,7 +2,6 @@ var people;
 
 fetchData();
 
-
 function fetchData() {
   fetch("https://api.myjson.com/bins/adpvt")
     .then(response => {
@@ -18,8 +17,6 @@ function fetchData() {
       console.log(people);
       fillTable(people);
       arrayRoles(people);
-
-
     })
     .catch(error => {
       console.log(error);
@@ -64,7 +61,7 @@ function fillTable(people) {
 }
 
 function getBtnId(btn) {
-  btn.addEventListener("click", function () {
+  btn.addEventListener("click", function() {
     document.getElementById("modal-body").innerHTML = "";
     document.getElementById("personName").innerText = this.dataset.id;
     let info = document.createElement("div");
@@ -81,22 +78,19 @@ function getBtnId(btn) {
     if (this.dataset.email == "we do not have any contact info") {
       let message = document.createElement("p");
       message.innerText = this.dataset.email;
-      document
-        .getElementById("modal-body")
-        .append(photo, info, message);
-
+      document.getElementById("modal-body").append(photo, info, message);
     } else {
       let btnEmail = document.createElement("button");
       let email = document.createElement("a");
       btnEmail.append(email);
       email.setAttribute("href", `mailto:${this.dataset.email}`);
       email.innerHTML = "send me an email";
-      document
-        .getElementById("modal-body")
-        .append(photo, info, btnEmail);
+      document.getElementById("modal-body").append(photo, info, btnEmail);
     }
 
-    document.getElementById("modal-body").style.backgroundColor = this.dataset.color;
+    document.getElementById(
+      "modal-body"
+    ).style.backgroundColor = this.dataset.color;
   });
 }
 
@@ -105,9 +99,14 @@ function arrayRoles(people) {
   for (var i = 0; i < people.length; i++) {
     var role = document.createElement("div");
     var inputRole = document.createElement("input");
-    inputRole.setAttribute("type", "checkbox")
+    inputRole.setAttribute("type", "checkbox");
     inputRole.setAttribute("id", people[i].role);
     inputRole.setAttribute("value", people[i].role);
+
+    inputRole.onchange = function() {
+      console.log("works");
+      filteredByRole(people);
+    };
 
     var labelRole = document.createElement("label");
     labelRole.setAttribute("for", people[i].role);
@@ -116,27 +115,50 @@ function arrayRoles(people) {
     filterRole.append(role);
   }
 }
-
+document.getElementById("filter_users").onkeyup = function() {
+  console.log("filter by name");
+  filteredPerson(people);
+};
 function filteredPerson(people) {
   let filtered;
   for (var i = 0; i < people.length; i++) {
-    if (people[i].name.toLowerCase().trim().includes(document.getElementById("filter_users").value.toLowerCase().trim()) || people[i].contact_info.nickName.toLowerCase().trim().includes(document.getElementById("filter_users").value.toLowerCase().trim())) {
-      filtered = (people[i]);
+    if (
+      people[i].name
+        .toLowerCase()
+        .trim()
+        .includes(
+          document
+            .getElementById("filter_users")
+            .value.toLowerCase()
+            .trim()
+        ) ||
+      people[i].contact_info.nickName
+        .toLowerCase()
+        .trim()
+        .includes(
+          document
+            .getElementById("filter_users")
+            .value.toLowerCase()
+            .trim()
+        )
+    ) {
+      filtered = people[i];
+      console.log(people[i]);
     }
-
   }
-  console.log(filtered);
 }
 
 function filteredByRole(people) {
+  console.log("enters function");
   let inputs = document.getElementsByTagName("input");
   let arrChecked = [];
-  let roleChecked = []
+  let roleChecked = [];
   for (let i = 0; i < inputs.length; i++) {
     if (inputs[i].type === "checkbox" && inputs[i].checked == true) {
-      arrChecked.push(inputs[i].value)
+      arrChecked.push(inputs[i].value);
     }
   }
+  console.log(arrChecked);
 
   if (arrChecked.length !== 0) {
     for (let k = 0; k < people.length; k++) {
@@ -146,18 +168,22 @@ function filteredByRole(people) {
         }
       }
     }
+    console.log(roleChecked);
   }
 }
 
+document.getElementById("order").onchange = function() {
+  orderByAge(people);
+};
 function orderByAge(people) {
   if (document.getElementById("order").value == "Descending") {
-    people.sort(function (a, b) {
-      return b.age - a.age
+    people.sort(function(a, b) {
+      return b.age - a.age;
     });
     console.log(people);
   } else if (document.getElementById("order").value == "Ascending") {
-    people.sort(function (a, b) {
-      return a.age - b.age
+    people.sort(function(a, b) {
+      return a.age - b.age;
     });
     console.log(people);
   }
