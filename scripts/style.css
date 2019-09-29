@@ -1,0 +1,114 @@
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+h1 {
+  display: inline-block;
+  margin: 0;
+}
+
+.filters,
+table {
+  margin: 0 20%;
+}
+
+.filters p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.filters p,
+.filters .search {
+  display: inline-flex;
+  /*
+  justify-content: center; */
+
+}
+
+#roles {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  grid-gap: 10px;
+}
+
+.search p {
+  margin: 0;
+  padding-right: 10px;
+}
+
+[alt] {
+  width: 50px;
+  height: 50px;
+}
+
+table {
+  width: 60%;
+  border-collapse: collapse;
+}
+
+td,
+th {
+  font-size: 16px;
+  border: 1px solid black;
+  text-align: left;
+  /* padding: 10px; */
+}
+
+th,
+tr>td:first-child {
+  font-weight: 600;
+}
+
+tr>td:last-child {
+  text-align: center;
+}
+
+a {
+  display: inline-block;
+}
+
+.modal-content {
+  width: 425px;
+}
+
+.modal img {
+  width: 300px;
+  border-radius: 50%;
+}
+
+#modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#modal-body p {
+  color: white;
+  text-shadow: 2px 2px 4px #000000;
+  margin: 0;
+}
+
+/* footer {
+  margin-top: 30px;
+}
+
+footer div {
+  display: flex;
+  justify-content: space-around;
+}
+
+footer p {
+  margin: 0;
+} */
+
+/* 
+tbody tr:hover {
+  background: rgba(231, 164, 101, 0.884);
+} */
