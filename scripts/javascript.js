@@ -1,5 +1,4 @@
 var people;
-
 fetchData();
 
 function fetchData() {
@@ -11,53 +10,69 @@ function fetchData() {
         throw new Error(response.status);
       }
     })
-
     .then(json => {
       people = json.people;
       console.log(people);
-      fillTable(people);
+      init();
       arrayRoles(people);
+      filteredPerson(people);
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("pageContent").style.display = "block";
     })
     .catch(error => {
       console.log(error);
     });
 }
 
-function fillTable(people) {
+function init() {
+  document.getElementById("search").onclick = function() {
+    console.log("filter by name");
+    filteredPerson(people);
+  };
+  document.getElementById("order").onchange = function() {
+    console.log("ordering members");
+    orderByAge(people);
+  };
+}
+
+function fillTable(array) {
   let tbody = document.getElementById("tbody");
-  for (var i = 0; i < people.length; i++) {
+  tbody.innerHTML = "";
+  console.log("enter fillTable", array);
+  for (var i = 0; i < array.length; i++) {
     let tr = document.createElement("tr");
     let td1 = document.createElement("td");
-    td1.innerHTML = people[i].name;
+    td1.innerHTML = array[i].name;
     let td2 = document.createElement("td");
-    td2.innerHTML = people[i].age;
+    td2.innerHTML = array[i].age;
     let td3 = document.createElement("td");
-    td3.innerHTML = people[i].role;
+    td3.innerHTML = array[i].role;
     let td4 = document.createElement("td");
-    td4.innerHTML = people[i].team;
+    td4.innerHTML = array[i].team;
     let td5 = document.createElement("td");
-    td5.innerHTML = people[i].seniority;
+    td5.innerHTML = array[i].seniority;
     let td6 = document.createElement("td");
     let btnInfo = document.createElement("button");
     btnInfo.innerHTML = "+ Info";
     btnInfo.setAttribute("data-toggle", "modal");
     btnInfo.setAttribute("data-target", "#contactInfo");
-    btnInfo.setAttribute("data-id", people[i].name);
-    btnInfo.setAttribute("data-photo", people[i].contact_info.photo);
-    if (people[i].contact_info.email != null) {
-      btnInfo.setAttribute("data-email", people[i].contact_info.email);
+    btnInfo.setAttribute("data-id", array[i].name);
+    btnInfo.setAttribute("data-photo", array[i].contact_info.photo);
+    if (array[i].contact_info.email != null) {
+      btnInfo.setAttribute("data-email", array[i].contact_info.email);
     } else {
       btnInfo.setAttribute("data-email", "we do not have any contact info");
     }
-    btnInfo.setAttribute("data-site", people[i].contact_info.site);
-    btnInfo.setAttribute("data-phone", people[i].contact_info.phone);
-    btnInfo.setAttribute("data-nick", people[i].contact_info.nickName);
-    btnInfo.setAttribute("data-color", people[i].team);
+    btnInfo.setAttribute("data-site", array[i].contact_info.site);
+    btnInfo.setAttribute("data-phone", array[i].contact_info.phone);
+    btnInfo.setAttribute("data-nick", array[i].contact_info.nickName);
+    btnInfo.setAttribute("data-color", array[i].team);
     getBtnId(btnInfo);
     td6.append(btnInfo);
     tr.append(td1, td2, td3, td4, td5, td6);
     tbody.append(tr);
   }
+  // orderByAge(array);
 }
 
 function getBtnId(btn) {
@@ -95,96 +110,109 @@ function getBtnId(btn) {
 }
 
 function arrayRoles(people) {
-  var filterRole = document.getElementById("roles");
-  for (var i = 0; i < people.length; i++) {
-    var role = document.createElement("div");
-    var inputRole = document.createElement("input");
+  let filterRole = document.getElementById("roles");
+
+  const roleSet = new Set();
+  for (let i = 0; i < people.length; i++) {
+    roleSet.add(people[i].role);
+  }
+  let uniqueItems = Array.from(new Set(roleSet));
+  for (let j = 0; j < uniqueItems.length; j++) {
+    let role = document.createElement("div");
+    let inputRole = document.createElement("input");
     inputRole.setAttribute("type", "checkbox");
-    inputRole.setAttribute("id", people[i].role);
-    inputRole.setAttribute("value", people[i].role);
+    inputRole.setAttribute("id", uniqueItems[j]);
+    inputRole.setAttribute("value", uniqueItems[j]);
 
     inputRole.onchange = function() {
       console.log("works");
       filteredByRole(people);
     };
 
-    var labelRole = document.createElement("label");
-    labelRole.setAttribute("for", people[i].role);
-    labelRole.innerText = people[i].role;
+    let labelRole = document.createElement("label");
+    labelRole.setAttribute("for", uniqueItems[j]);
+    labelRole.innerText = uniqueItems[j];
     role.append(inputRole, labelRole);
     filterRole.append(role);
   }
 }
-document.getElementById("filter_users").onkeyup = function() {
-  console.log("filter by name");
-  filteredPerson(people);
-};
+
 function filteredPerson(people) {
-  let filtered;
-  for (var i = 0; i < people.length; i++) {
-    if (
-      people[i].name
-        .toLowerCase()
-        .trim()
-        .includes(
-          document
-            .getElementById("filter_users")
-            .value.toLowerCase()
-            .trim()
-        ) ||
-      people[i].contact_info.nickName
-        .toLowerCase()
-        .trim()
-        .includes(
-          document
-            .getElementById("filter_users")
-            .value.toLowerCase()
-            .trim()
-        )
-    ) {
-      filtered = people[i];
-      console.log(people[i]);
+  let filtered = [];
+  if (document.getElementById("filter_users").value !== "") {
+    for (var i = 0; i < people.length; i++) {
+      if (
+        people[i].name
+          .toLowerCase()
+          .trim()
+          .includes(
+            document
+              .getElementById("filter_users")
+              .value.toLowerCase()
+              .trim()
+          ) ||
+        people[i].contact_info.nickName
+          .toLowerCase()
+          .trim()
+          .includes(
+            document
+              .getElementById("filter_users")
+              .value.toLowerCase()
+              .trim()
+          )
+      ) {
+        filtered.push(people[i]);
+      }
     }
+    filteredByRole(filtered);
+  } else {
+    console.log("no input");
+    filteredByRole(people);
   }
 }
 
-function filteredByRole(people) {
-  console.log("enters function");
+function filteredByRole(array) {
+  // console.log("enters function");
   let inputs = document.getElementsByTagName("input");
   let arrChecked = [];
   let roleChecked = [];
   for (let i = 0; i < inputs.length; i++) {
-    if (inputs[i].type === "checkbox" && inputs[i].checked == true) {
+    if (inputs[i].type === "checkbox" && inputs[i].checked) {
       arrChecked.push(inputs[i].value);
     }
   }
-  console.log(arrChecked);
+  // console.log(arrChecked);
 
   if (arrChecked.length !== 0) {
-    for (let k = 0; k < people.length; k++) {
+    for (let k = 0; k < array.length; k++) {
       for (let j = 0; j < arrChecked.length; j++) {
-        if (people[k].role === arrChecked[j]) {
-          roleChecked.push(people[k]);
+        if (array[k].role === arrChecked[j]) {
+          roleChecked.push(array[k]);
         }
       }
     }
     console.log(roleChecked);
+    orderByAge(roleChecked);
+  } else {
+    orderByAge(array);
   }
 }
 
-document.getElementById("order").onchange = function() {
-  orderByAge(people);
-};
-function orderByAge(people) {
-  if (document.getElementById("order").value == "Descending") {
-    people.sort(function(a, b) {
+function orderByAge(array) {
+  if (document.getElementById("order").value == "Select") {
+    console.log("no option selected");
+    fillTable(array);
+  } else if (document.getElementById("order").value == "Descending") {
+    array.sort(function(a, b) {
       return b.age - a.age;
     });
-    console.log(people);
+    console.log(array);
+    fillTable(array);
   } else if (document.getElementById("order").value == "Ascending") {
-    people.sort(function(a, b) {
+    array.sort(function(a, b) {
       return a.age - b.age;
     });
-    console.log(people);
+    console.log(array);
+    fillTable(array);
   }
 }

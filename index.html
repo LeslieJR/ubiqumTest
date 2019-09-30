@@ -13,56 +13,61 @@
 </head>
 
 <body>
+  <div id="loader"></div>
   <div class="title">
     <img src="logo.jpg" alt="logo" />
     <h1>Ubiqum's Team</h1>
   </div>
 
-  <div class="filters">
-    <div>
-      <p>Search by name:</p>
-      <div class="search">
-        <input type="text" placeholder="Name or Nickname" id="filter_users" />
+  <div id="pageContent">
+    <div class="filters">
+      <div>
+        <p>Search by name:</p>
+        <div class="search">
+          <input type="text" placeholder="Name or Nickname" id="filter_users" />
+          <button id="search">Search</button>
+        </div>
+      </div>
+      <div>
+        <p>Filter by Role:</p>
+        <div id="roles"></div>
+      </div>
+      <div>
+        <p>Order by Age</p>
+        <select id="order">
+          <option value="Select" selected disabled>Select</option>
+          <option value="Ascending">Ascending</option>
+          <option value="Descending">Descending</option>
+        </select>
       </div>
     </div>
-    <div>
-      <p>Filter by Role:</p>
-      <div id="roles"></div>
-    </div>
-    <div>
-      <p>Order by Age</p>
-      <select id="order">
-        <option value="Ascending">Ascending</option>
-        <option value="Descending">Descending</option>
-      </select>
-    </div>
-  </div>
-  <table>
-    <thead>
-      <th>Name</th>
-      <th>Age</th>
-      <th>Role</th>
-      <th>Team</th>
-      <th>Seniority</th>
-      <th>More Info</th>
-    </thead>
-    <tbody id="tbody"></tbody>
-  </table>
+    <table>
+      <thead>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Role</th>
+        <th>Team</th>
+        <th>Seniority</th>
+        <th>More Info</th>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
 
-  <div class="modal fade" id="contactInfo" tabindex="-1" role="dialog" aria-labelledby="person" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="personName"></h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" id="modal-body"></div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Close
-          </button>
+    <div class="modal fade" id="contactInfo" tabindex="-1" role="dialog" aria-labelledby="person" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="personName"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </div>
