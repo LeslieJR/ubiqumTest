@@ -23,17 +23,6 @@ function fetchData() {
     });
 }
 
-// function init() {
-//   document.getElementById("search").onclick = function() {
-//     console.log("filter by name");
-//     filteredPerson(people);
-//   };
-//   document.getElementById("order").onchange = function() {
-//     console.log("ordering members");
-//     orderByAge;
-//   };
-// }
-
 function fillTable(array) {
   let table = document.getElementById("tabl");
   let tbody = document.getElementById("tbody");
@@ -76,15 +65,15 @@ function fillTable(array) {
     }
   } else {
     console.log("no match found");
-    table.innerHTML = ""
+    table.innerHTML = "";
     tbody.innerHTML = "";
     document.getElementById("nomatch").style.display = "inline-block";
+    document.getElementById("reset").style.display = "inline-block";
   }
-  // orderByAge(array);
 }
 
 function getBtnId(btn) {
-  btn.addEventListener("click", function () {
+  btn.addEventListener("click", function() {
     document.getElementById("modal-body").innerHTML = "";
     document.getElementById("personName").innerText = this.dataset.id;
     let info = document.createElement("div");
@@ -132,7 +121,7 @@ function arrayRoles(people) {
     inputRole.setAttribute("id", uniqueItems[j]);
     inputRole.setAttribute("value", uniqueItems[j]);
 
-    inputRole.onchange = function () {
+    inputRole.onchange = function() {
       console.log("works");
       filteredByRole(people);
     };
@@ -154,41 +143,41 @@ function filteredPerson(array) {
     for (var i = 0; i < array.length; i++) {
       if (
         array[i].name
-        .toLowerCase()
-        .trim()
-        .includes(
-          document
-          .getElementById("filter_users")
-          .value.toLowerCase()
+          .toLowerCase()
           .trim()
-        ) ||
+          .includes(
+            document
+              .getElementById("filter_users")
+              .value.toLowerCase()
+              .trim()
+          ) ||
         array[i].contact_info.nickName
-        .toLowerCase()
-        .trim()
-        .includes(
-          document
-          .getElementById("filter_users")
-          .value.toLowerCase()
+          .toLowerCase()
           .trim()
-        )
+          .includes(
+            document
+              .getElementById("filter_users")
+              .value.toLowerCase()
+              .trim()
+          )
       ) {
         filtered.push(array[i]);
       }
     }
     fillTable(filtered);
-    document.getElementById("order").onchange = function () {
+    document.getElementById("order").onchange = function() {
       orderByAge(filtered);
     };
-    document.getElementById("search").onclick = function () {
+    document.getElementById("search").onclick = function() {
       filteredPerson(filtered);
     };
   } else {
     console.log("no input");
     fillTable(array);
-    document.getElementById("order").onchange = function () {
+    document.getElementById("order").onchange = function() {
       orderByAge(array);
     };
-    document.getElementById("search").onclick = function () {
+    document.getElementById("search").onclick = function() {
       filteredPerson(array);
     };
   }
@@ -216,19 +205,19 @@ function filteredByRole(array) {
     }
     console.log(roleChecked);
     fillTable(roleChecked);
-    document.getElementById("order").onchange = function () {
+    document.getElementById("order").onchange = function() {
       orderByAge(roleChecked);
     };
-    document.getElementById("search").onclick = function () {
+    document.getElementById("search").onclick = function() {
       filteredPerson(roleChecked);
     };
   } else {
     console.log(array);
     fillTable(array);
-    document.getElementById("order").onchange = function () {
+    document.getElementById("order").onchange = function() {
       orderByAge(array);
     };
-    document.getElementById("search").onclick = function () {
+    document.getElementById("search").onclick = function() {
       filteredPerson(array);
     };
   }
@@ -238,28 +227,32 @@ function orderByAge(array) {
   console.log("enters order function");
   let selected = document.getElementById("order");
   if (selected.value == "Descending") {
-    array.sort(function (a, b) {
+    array.sort(function(a, b) {
       return b.age - a.age;
     });
     console.log("descending", array);
     fillTable(array);
-    document.getElementById("order").onchange = function () {
+    document.getElementById("order").onchange = function() {
       orderByAge(array);
     };
-    document.getElementById("search").onclick = function () {
+    document.getElementById("search").onclick = function() {
       filteredPerson(array);
     };
   } else if (selected.value == "Ascending") {
-    array.sort(function (a, b) {
+    array.sort(function(a, b) {
       return a.age - b.age;
     });
     console.log("ascending", array);
     fillTable(array);
-    document.getElementById("order").onchange = function () {
+    document.getElementById("order").onchange = function() {
       orderByAge(array);
     };
-    document.getElementById("search").onclick = function () {
+    document.getElementById("search").onclick = function() {
       filteredPerson(array);
     };
   }
 }
+
+document.getElementById("reset").onclick = function() {
+  location.reload(true);
+};

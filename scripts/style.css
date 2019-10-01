@@ -7,14 +7,13 @@ body {
   position: fixed;
   top: 0;
   width: 100%;
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 1px 1px 10px #00000026;
 }
 
 .title {
   display: flex;
   justify-content: center;
-  padding-bottom: 20px;
-  padding-top: 20px;
+  padding: 10px 0;
 }
 
 h1 {
@@ -74,8 +73,8 @@ tr {
   border-bottom: 1px solid black;
 }
 
-tr:nth-child(even) {
-  background-color: #f2f2f2;
+tbody tr:nth-child(odd) {
+  background-color: #8080801f;
 }
 
 td,
@@ -98,13 +97,13 @@ tr>td:first-child {
 th:first-child,
 tr>td:first-child {
   padding-left: 10px;
-  border-left: 1px solid black;
+  border-left: 1px solid #000000;
 }
 
 th:last-child,
 tr>td:last-child {
   padding-right: 10px;
-  border-right: 1px solid black;
+  border-right: 1px solid #000000;
 }
 
 tr>td:last-child {
@@ -117,11 +116,20 @@ button[data-toggle=modal] {
 }
 
 button[data-toggle=modal]:hover {
-  background-color: rgba(244, 67, 54, 0.45);
+  background-color: #f4433673;
 }
 
 a {
   display: inline-block;
+}
+
+#reset {
+  display: none;
+  background-color: #f44336;
+  border-radius: 99px;
+  font-size: 1.4rem;
+  padding: 5px 10px;
+  margin-left: 25%;
 }
 
 #nomatch {
@@ -159,7 +167,7 @@ a {
 }
 
 #modal-body p {
-  color: white;
+  color: #ffffff;
   text-shadow: 2px 2px 4px #000000;
   margin: 0;
 }
@@ -175,18 +183,18 @@ a {
 }
 
 #modal-body>div a {
-  color: white;
+  color: #ffffff;
   text-shadow: 2px 2px 4px #000000;
 }
 
 #modal-body button a {
-  color: black;
+  color: #000000;
 }
 
 #modal-body button {
   border-radius: 90px;
   padding: 5px 15px;
-  background-color: white;
+  background-color: #ffffff;
 
 }
 
@@ -195,12 +203,12 @@ a {
 }
 
 #modal-body button:hover {
-  background-color: gray;
+  background-color: #808080;
 }
 
 /* loader */
 #pageContent {
-  background-color: rgba(128, 128, 128, 0.12);
+  background-color: #8080801f;
   display: none;
   padding-top: 20px;
   padding-bottom: 20px;
