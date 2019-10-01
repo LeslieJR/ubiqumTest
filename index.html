@@ -14,12 +14,15 @@
 
 <body>
   <div id="loader"></div>
-  <div class="title">
-    <img src="logo.jpg" alt="logo" />
-    <h1>Ubiqum's Team</h1>
-  </div>
+
 
   <div id="pageContent">
+    <header id="header">
+      <div class="title">
+        <img src="logo.jpg" alt="logo" />
+        <h1>Ubiqum's Team</h1>
+      </div>
+    </header>
     <div class="filters">
       <div>
         <p>Search by name:</p>
@@ -33,11 +36,11 @@
         <div id="roles"></div>
       </div>
       <div>
-        <p>Order by Age</p>
+        <p>Order by Age:</p>
         <select id="order">
           <option value="Select" selected disabled>Select</option>
-          <option value="Ascending">Ascending</option>
-          <option value="Descending">Descending</option>
+          <option value="Ascending" onchange="orderByAge">Ascending</option>
+          <option value="Descending" onchange="orderByAge">Descending</option>
         </select>
       </div>
     </div>
@@ -52,6 +55,7 @@
       </thead>
       <tbody id="tbody"></tbody>
     </table>
+
 
     <div class="modal fade" id="contactInfo" tabindex="-1" role="dialog" aria-labelledby="person" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">

@@ -1,4 +1,4 @@
-var people;
+var people = [];
 fetchData();
 
 function fetchData() {
@@ -25,11 +25,11 @@ function fetchData() {
 }
 
 function init() {
-  document.getElementById("search").onclick = function () {
+  document.getElementById("search").onclick = function() {
     console.log("filter by name");
     filteredPerson(people);
   };
-  document.getElementById("order").onchange = function () {
+  document.getElementById("order").onchange = function() {
     console.log("ordering members");
     orderByAge(people);
   };
@@ -72,11 +72,11 @@ function fillTable(array) {
     tr.append(td1, td2, td3, td4, td5, td6);
     tbody.append(tr);
   }
-  // filteredByRole(array);
+  // orderByAge(array);
 }
 
 function getBtnId(btn) {
-  btn.addEventListener("click", function () {
+  btn.addEventListener("click", function() {
     document.getElementById("modal-body").innerHTML = "";
     document.getElementById("personName").innerText = this.dataset.id;
     let info = document.createElement("div");
@@ -124,7 +124,7 @@ function arrayRoles(people) {
     inputRole.setAttribute("id", uniqueItems[j]);
     inputRole.setAttribute("value", uniqueItems[j]);
 
-    inputRole.onchange = function () {
+    inputRole.onchange = function() {
       console.log("works");
       filteredByRole(people);
     };
@@ -137,37 +137,37 @@ function arrayRoles(people) {
   }
 }
 
-function filteredPerson(array) {
+function filteredPerson(people) {
   let filtered = [];
   if (document.getElementById("filter_users").value !== "") {
-    for (var i = 0; i < array.length; i++) {
+    for (var i = 0; i < people.length; i++) {
       if (
-        array[i].name
-        .toLowerCase()
-        .trim()
-        .includes(
-          document
-          .getElementById("filter_users")
-          .value.toLowerCase()
+        people[i].name
+          .toLowerCase()
           .trim()
-        ) ||
-        array[i].contact_info.nickName
-        .toLowerCase()
-        .trim()
-        .includes(
-          document
-          .getElementById("filter_users")
-          .value.toLowerCase()
+          .includes(
+            document
+              .getElementById("filter_users")
+              .value.toLowerCase()
+              .trim()
+          ) ||
+        people[i].contact_info.nickName
+          .toLowerCase()
           .trim()
-        )
+          .includes(
+            document
+              .getElementById("filter_users")
+              .value.toLowerCase()
+              .trim()
+          )
       ) {
-        filtered.push(array[i]);
+        filtered.push(people[i]);
       }
     }
     filteredByRole(filtered);
   } else {
     console.log("no input");
-    filteredByRole(array);
+    filteredByRole(people);
   }
 }
 
@@ -203,13 +203,13 @@ function orderByAge(array) {
     console.log("no option selected");
     fillTable(array);
   } else if (document.getElementById("order").value == "Descending") {
-    array.sort(function (a, b) {
+    array.sort(function(a, b) {
       return b.age - a.age;
     });
     console.log(array);
     fillTable(array);
   } else if (document.getElementById("order").value == "Ascending") {
-    array.sort(function (a, b) {
+    array.sort(function(a, b) {
       return a.age - b.age;
     });
     console.log(array);
