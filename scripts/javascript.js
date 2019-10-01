@@ -1,4 +1,3 @@
-var people = [];
 fetchData();
 
 function fetchData() {
@@ -13,9 +12,9 @@ function fetchData() {
     .then(json => {
       people = json.people;
       console.log(people);
-      init();
       arrayRoles(people);
-      filteredPerson(people);
+      filteredByRole(people);
+      // filteredPerson(people);
       document.getElementById("loader").style.display = "none";
       document.getElementById("pageContent").style.display = "block";
     })
@@ -24,59 +23,68 @@ function fetchData() {
     });
 }
 
-function init() {
-  document.getElementById("search").onclick = function() {
-    console.log("filter by name");
-    filteredPerson(people);
-  };
-  document.getElementById("order").onchange = function() {
-    console.log("ordering members");
-    orderByAge(people);
-  };
-}
+// function init() {
+//   document.getElementById("search").onclick = function() {
+//     console.log("filter by name");
+//     filteredPerson(people);
+//   };
+//   document.getElementById("order").onchange = function() {
+//     console.log("ordering members");
+//     orderByAge;
+//   };
+// }
 
 function fillTable(array) {
+  let table = document.getElementById("tabl");
   let tbody = document.getElementById("tbody");
   tbody.innerHTML = "";
-  console.log("enter fillTable", array);
-  for (var i = 0; i < array.length; i++) {
-    let tr = document.createElement("tr");
-    let td1 = document.createElement("td");
-    td1.innerHTML = array[i].name;
-    let td2 = document.createElement("td");
-    td2.innerHTML = array[i].age;
-    let td3 = document.createElement("td");
-    td3.innerHTML = array[i].role;
-    let td4 = document.createElement("td");
-    td4.innerHTML = array[i].team;
-    let td5 = document.createElement("td");
-    td5.innerHTML = array[i].seniority;
-    let td6 = document.createElement("td");
-    let btnInfo = document.createElement("button");
-    btnInfo.innerHTML = "+ Info";
-    btnInfo.setAttribute("data-toggle", "modal");
-    btnInfo.setAttribute("data-target", "#contactInfo");
-    btnInfo.setAttribute("data-id", array[i].name);
-    btnInfo.setAttribute("data-photo", array[i].contact_info.photo);
-    if (array[i].contact_info.email != null) {
-      btnInfo.setAttribute("data-email", array[i].contact_info.email);
-    } else {
-      btnInfo.setAttribute("data-email", "we do not have any contact info");
+  if (array.length !== 0) {
+    document.getElementById("nomatch").style.display = "none";
+    console.log("enter fillTable", array);
+    for (var i = 0; i < array.length; i++) {
+      let tr = document.createElement("tr");
+      let td1 = document.createElement("td");
+      td1.innerHTML = array[i].name;
+      let td2 = document.createElement("td");
+      td2.innerHTML = array[i].age;
+      let td3 = document.createElement("td");
+      td3.innerHTML = array[i].role;
+      let td4 = document.createElement("td");
+      td4.innerHTML = array[i].team;
+      let td5 = document.createElement("td");
+      td5.innerHTML = array[i].seniority;
+      let td6 = document.createElement("td");
+      let btnInfo = document.createElement("button");
+      btnInfo.innerHTML = "+ Info";
+      btnInfo.setAttribute("data-toggle", "modal");
+      btnInfo.setAttribute("data-target", "#contactInfo");
+      btnInfo.setAttribute("data-id", array[i].name);
+      btnInfo.setAttribute("data-photo", array[i].contact_info.photo);
+      if (array[i].contact_info.email != null) {
+        btnInfo.setAttribute("data-email", array[i].contact_info.email);
+      } else {
+        btnInfo.setAttribute("data-email", "we do not have any contact info");
+      }
+      btnInfo.setAttribute("data-site", array[i].contact_info.site);
+      btnInfo.setAttribute("data-phone", array[i].contact_info.phone);
+      btnInfo.setAttribute("data-nick", array[i].contact_info.nickName);
+      btnInfo.setAttribute("data-color", array[i].team);
+      getBtnId(btnInfo);
+      td6.append(btnInfo);
+      tr.append(td1, td2, td3, td4, td5, td6);
+      tbody.append(tr);
     }
-    btnInfo.setAttribute("data-site", array[i].contact_info.site);
-    btnInfo.setAttribute("data-phone", array[i].contact_info.phone);
-    btnInfo.setAttribute("data-nick", array[i].contact_info.nickName);
-    btnInfo.setAttribute("data-color", array[i].team);
-    getBtnId(btnInfo);
-    td6.append(btnInfo);
-    tr.append(td1, td2, td3, td4, td5, td6);
-    tbody.append(tr);
+  } else {
+    console.log("no match found");
+    table.innerHTML = ""
+    tbody.innerHTML = "";
+    document.getElementById("nomatch").style.display = "inline-block";
   }
   // orderByAge(array);
 }
 
 function getBtnId(btn) {
-  btn.addEventListener("click", function() {
+  btn.addEventListener("click", function () {
     document.getElementById("modal-body").innerHTML = "";
     document.getElementById("personName").innerText = this.dataset.id;
     let info = document.createElement("div");
@@ -124,7 +132,7 @@ function arrayRoles(people) {
     inputRole.setAttribute("id", uniqueItems[j]);
     inputRole.setAttribute("value", uniqueItems[j]);
 
-    inputRole.onchange = function() {
+    inputRole.onchange = function () {
       console.log("works");
       filteredByRole(people);
     };
@@ -137,42 +145,57 @@ function arrayRoles(people) {
   }
 }
 
-function filteredPerson(people) {
+function filteredPerson(array) {
+  console.log("enters person function");
+  document.getElementById("order").value = "Select";
+  // document.getElementsByTagName("input[type=checkbox]");
   let filtered = [];
   if (document.getElementById("filter_users").value !== "") {
-    for (var i = 0; i < people.length; i++) {
+    for (var i = 0; i < array.length; i++) {
       if (
-        people[i].name
-          .toLowerCase()
+        array[i].name
+        .toLowerCase()
+        .trim()
+        .includes(
+          document
+          .getElementById("filter_users")
+          .value.toLowerCase()
           .trim()
-          .includes(
-            document
-              .getElementById("filter_users")
-              .value.toLowerCase()
-              .trim()
-          ) ||
-        people[i].contact_info.nickName
-          .toLowerCase()
+        ) ||
+        array[i].contact_info.nickName
+        .toLowerCase()
+        .trim()
+        .includes(
+          document
+          .getElementById("filter_users")
+          .value.toLowerCase()
           .trim()
-          .includes(
-            document
-              .getElementById("filter_users")
-              .value.toLowerCase()
-              .trim()
-          )
+        )
       ) {
-        filtered.push(people[i]);
+        filtered.push(array[i]);
       }
     }
-    filteredByRole(filtered);
+    fillTable(filtered);
+    document.getElementById("order").onchange = function () {
+      orderByAge(filtered);
+    };
+    document.getElementById("search").onclick = function () {
+      filteredPerson(filtered);
+    };
   } else {
     console.log("no input");
-    filteredByRole(people);
+    fillTable(array);
+    document.getElementById("order").onchange = function () {
+      orderByAge(array);
+    };
+    document.getElementById("search").onclick = function () {
+      filteredPerson(array);
+    };
   }
 }
 
 function filteredByRole(array) {
-  // console.log("enters function");
+  console.log("enters de filterbyrole function");
   let inputs = document.getElementsByTagName("input");
   let arrChecked = [];
   let roleChecked = [];
@@ -192,27 +215,51 @@ function filteredByRole(array) {
       }
     }
     console.log(roleChecked);
-    orderByAge(roleChecked);
+    fillTable(roleChecked);
+    document.getElementById("order").onchange = function () {
+      orderByAge(roleChecked);
+    };
+    document.getElementById("search").onclick = function () {
+      filteredPerson(roleChecked);
+    };
   } else {
-    orderByAge(array);
+    console.log(array);
+    fillTable(array);
+    document.getElementById("order").onchange = function () {
+      orderByAge(array);
+    };
+    document.getElementById("search").onclick = function () {
+      filteredPerson(array);
+    };
   }
 }
 
 function orderByAge(array) {
-  if (document.getElementById("order").value == "Select") {
-    console.log("no option selected");
-    fillTable(array);
-  } else if (document.getElementById("order").value == "Descending") {
-    array.sort(function(a, b) {
+  console.log("enters order function");
+  let selected = document.getElementById("order");
+  if (selected.value == "Descending") {
+    array.sort(function (a, b) {
       return b.age - a.age;
     });
-    console.log(array);
+    console.log("descending", array);
     fillTable(array);
-  } else if (document.getElementById("order").value == "Ascending") {
-    array.sort(function(a, b) {
+    document.getElementById("order").onchange = function () {
+      orderByAge(array);
+    };
+    document.getElementById("search").onclick = function () {
+      filteredPerson(array);
+    };
+  } else if (selected.value == "Ascending") {
+    array.sort(function (a, b) {
       return a.age - b.age;
     });
-    console.log(array);
+    console.log("ascending", array);
     fillTable(array);
+    document.getElementById("order").onchange = function () {
+      orderByAge(array);
+    };
+    document.getElementById("search").onclick = function () {
+      filteredPerson(array);
+    };
   }
 }

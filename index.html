@@ -39,12 +39,12 @@
         <p>Order by Age:</p>
         <select id="order">
           <option value="Select" selected disabled>Select</option>
-          <option value="Ascending" onchange="orderByAge">Ascending</option>
-          <option value="Descending" onchange="orderByAge">Descending</option>
+          <option value="Ascending">Ascending</option>
+          <option value="Descending">Descending</option>
         </select>
       </div>
     </div>
-    <table>
+    <table id="tabl">
       <thead>
         <th>Name</th>
         <th>Age</th>
@@ -55,6 +55,9 @@
       </thead>
       <tbody id="tbody"></tbody>
     </table>
+    <div id="nomatch">
+      <h2>No match found</h2>
+    </div>
 
 
     <div class="modal fade" id="contactInfo" tabindex="-1" role="dialog" aria-labelledby="person" aria-hidden="true">
