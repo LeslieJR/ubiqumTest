@@ -124,7 +124,7 @@ a {
 }
 
 #reset {
-  display: none;
+  /*  */
   background-color: #f44336;
   border-radius: 99px;
   font-size: 1.4rem;

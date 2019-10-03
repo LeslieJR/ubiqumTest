@@ -12,11 +12,21 @@ function fetchData() {
     .then(json => {
       people = json.people;
       console.log(people);
-      arrayRoles(people);
-      filteredByRole(people);
-      // filteredPerson(people);
+      fillTable(people);
       document.getElementById("loader").style.display = "none";
       document.getElementById("pageContent").style.display = "block";
+      arrayRoles(people);
+      document
+        .getElementById("filter_users")
+        .addEventListener("keyup", function() {
+          filteredPerson(people);
+        });
+      document.getElementById("order").addEventListener("change", function() {
+        orderByAge(people);
+      });
+
+      // filteredByRole(people);
+      // filteredPerson(people);
     })
     .catch(error => {
       console.log(error);
@@ -67,8 +77,6 @@ function fillTable(array) {
     console.log("no match found");
     table.innerHTML = "";
     tbody.innerHTML = "";
-    document.getElementById("nomatch").style.display = "inline-block";
-    document.getElementById("reset").style.display = "inline-block";
   }
 }
 
@@ -121,6 +129,7 @@ function arrayRoles(people) {
     inputRole.setAttribute("id", uniqueItems[j]);
     inputRole.setAttribute("value", uniqueItems[j]);
 
+    // here a function that is called onchange is attached to each input of type checkbox
     inputRole.onchange = function() {
       console.log("works");
       filteredByRole(people);
@@ -136,7 +145,7 @@ function arrayRoles(people) {
 
 function filteredPerson(array) {
   console.log("enters person function");
-  document.getElementById("order").value = "Select";
+
   // document.getElementsByTagName("input[type=checkbox]");
   let filtered = [];
   if (document.getElementById("filter_users").value !== "") {
@@ -164,22 +173,11 @@ function filteredPerson(array) {
         filtered.push(array[i]);
       }
     }
-    fillTable(filtered);
-    document.getElementById("order").onchange = function() {
-      orderByAge(filtered);
-    };
-    document.getElementById("search").onclick = function() {
-      filteredPerson(filtered);
-    };
+
+    orderByAge(filtered);
   } else {
     console.log("no input");
-    fillTable(array);
-    document.getElementById("order").onchange = function() {
-      orderByAge(array);
-    };
-    document.getElementById("search").onclick = function() {
-      filteredPerson(array);
-    };
+    orderByAge(array);
   }
 }
 
@@ -204,22 +202,10 @@ function filteredByRole(array) {
       }
     }
     console.log(roleChecked);
-    fillTable(roleChecked);
-    document.getElementById("order").onchange = function() {
-      orderByAge(roleChecked);
-    };
-    document.getElementById("search").onclick = function() {
-      filteredPerson(roleChecked);
-    };
+    orderByAge(roleChecked);
   } else {
     console.log(array);
-    fillTable(array);
-    document.getElementById("order").onchange = function() {
-      orderByAge(array);
-    };
-    document.getElementById("search").onclick = function() {
-      filteredPerson(array);
-    };
+    orderByAge(array);
   }
 }
 
@@ -232,27 +218,26 @@ function orderByAge(array) {
     });
     console.log("descending", array);
     fillTable(array);
-    document.getElementById("order").onchange = function() {
-      orderByAge(array);
-    };
-    document.getElementById("search").onclick = function() {
-      filteredPerson(array);
-    };
   } else if (selected.value == "Ascending") {
     array.sort(function(a, b) {
       return a.age - b.age;
     });
     console.log("ascending", array);
     fillTable(array);
-    document.getElementById("order").onchange = function() {
-      orderByAge(array);
-    };
-    document.getElementById("search").onclick = function() {
-      filteredPerson(array);
-    };
+  } else {
+    fillTable(array);
   }
 }
 
 document.getElementById("reset").onclick = function() {
-  location.reload(true);
+  document.getElementById("filter_users").value = "";
+  var inputs = document.getElementsByTagName("input");
+  for (var i = 0; i < inputs.length; i++) {
+    if (inputs[i].type == "checkbox") {
+      inputs[i].checked = false;
+    }
+  }
+
+  document.getElementById("order").value = "Select";
+  fillTable(people);
 };
