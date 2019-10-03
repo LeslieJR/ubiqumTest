@@ -75,8 +75,9 @@ function fillTable(array) {
     }
   } else {
     console.log("no match found");
-    table.innerHTML = "";
-    tbody.innerHTML = "";
+    document.getElementById("nomatch").style.display = "block";
+    // table.innerHTML = "";
+    // tbody.innerHTML = "";
   }
 }
 
