@@ -19,10 +19,10 @@ function fetchData() {
       document
         .getElementById("filter_users")
         .addEventListener("keyup", function() {
-          filteredPerson(people);
+          filteredByRole(people);
         });
       document.getElementById("order").addEventListener("change", function() {
-        orderByAge(people);
+        filteredByRole(people);
       });
 
       // filteredByRole(people);
@@ -203,10 +203,10 @@ function filteredByRole(array) {
       }
     }
     console.log(roleChecked);
-    orderByAge(roleChecked);
+    filteredPerson(roleChecked);
   } else {
     console.log(array);
-    orderByAge(array);
+    filteredPerson(array);
   }
 }
 
