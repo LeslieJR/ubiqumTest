@@ -1,7 +1,7 @@
 fetchData();
 
 function fetchData() {
-  fetch("https://api.myjson.com/bins/adpvt")
+  fetch("https://fakerapi.it/api/v1/persons?_quantity=10&_birthday_end=1998-01-01")
     .then(response => {
       if (response.ok) {
         return response.json();
@@ -10,23 +10,23 @@ function fetchData() {
       }
     })
     .then(json => {
-      people = json.people;
-      console.log(people);
-      fillTable(people);
+      data = json.data;
+      console.log(data);
+      fillTable(data);
       document.getElementById("loader").style.display = "none";
       document.getElementById("pageContent").style.display = "block";
-      arrayRoles(people);
+      arrayCountries(data);
       document
         .getElementById("filter_users")
         .addEventListener("keyup", function() {
-          filteredByRole(people);
+          filteredByCountry(data);
         });
       document.getElementById("order").addEventListener("change", function() {
-        filteredByRole(people);
+        filteredByCountry(data);
       });
 
-      // filteredByRole(people);
-      // filteredPerson(people);
+     filteredByCountry(data);
+     filteredPerson(data);
     })
     .catch(error => {
       console.log(error);
@@ -40,37 +40,40 @@ function fillTable(array) {
   if (array.length !== 0) {
     document.getElementById("nomatch").style.display = "none";
     console.log("enter fillTable", array);
+    var today = new Date();
+    var year = today.getFullYear();
     for (var i = 0; i < array.length; i++) {
       let tr = document.createElement("tr");
       let td1 = document.createElement("td");
-      td1.innerHTML = array[i].name;
+      td1.innerHTML = array[i].firstname +" "+ array[i].lastname;
       let td2 = document.createElement("td");
-      td2.innerHTML = array[i].age;
+      td2.innerHTML = year - array[i].birthday.slice(0,4);
+
       let td3 = document.createElement("td");
-      td3.innerHTML = array[i].role;
+      td3.innerHTML = array[i].email;
       let td4 = document.createElement("td");
-      td4.innerHTML = array[i].team;
-      let td5 = document.createElement("td");
-      td5.innerHTML = array[i].seniority;
+      td4.innerHTML = array[i].address.country;
+      // let td5 = document.createElement("td");
+      // td5.innerHTML = array[i].;
       let td6 = document.createElement("td");
       let btnInfo = document.createElement("button");
       btnInfo.innerHTML = "+ Info";
       btnInfo.setAttribute("data-toggle", "modal");
       btnInfo.setAttribute("data-target", "#contactInfo");
-      btnInfo.setAttribute("data-id", array[i].name);
-      btnInfo.setAttribute("data-photo", array[i].contact_info.photo);
-      if (array[i].contact_info.email != null) {
-        btnInfo.setAttribute("data-email", array[i].contact_info.email);
+      btnInfo.setAttribute("data-id", array[i].firstname);
+      btnInfo.setAttribute("data-photo", array[i].image);
+      if (array[i].email != null) {
+        btnInfo.setAttribute("data-email", array[i].email);
       } else {
         btnInfo.setAttribute("data-email", "we do not have any contact info");
       }
-      btnInfo.setAttribute("data-site", array[i].contact_info.site);
-      btnInfo.setAttribute("data-phone", array[i].contact_info.phone);
-      btnInfo.setAttribute("data-nick", array[i].contact_info.nickName);
-      btnInfo.setAttribute("data-color", array[i].team);
+       btnInfo.setAttribute("data-site", array[i].website);
+       btnInfo.setAttribute("data-phone", array[i].phone);
+       btnInfo.setAttribute("data-nick", array[i].address.city);
+      // btnInfo.setAttribute("data-color", array[i].);
       getBtnId(btnInfo);
       td6.append(btnInfo);
-      tr.append(td1, td2, td3, td4, td5, td6);
+      tr.append(td1, td2, td3, td4, td6);
       tbody.append(tr);
     }
   } else {
@@ -115,32 +118,32 @@ function getBtnId(btn) {
   });
 }
 
-function arrayRoles(people) {
-  let filterRole = document.getElementById("roles");
+function arrayCountries(data) {
+  let filterCountry = document.getElementById("country");
 
-  const roleSet = new Set();
-  for (let i = 0; i < people.length; i++) {
-    roleSet.add(people[i].role);
+  const countrySet = new Set();
+  for (let i = 0; i < data.length; i++) {
+    countrySet.add(data[i].address.country);
   }
-  let uniqueItems = Array.from(new Set(roleSet));
+  let uniqueItems = Array.from(new Set(countrySet));
   for (let j = 0; j < uniqueItems.length; j++) {
-    let role = document.createElement("div");
-    let inputRole = document.createElement("input");
-    inputRole.setAttribute("type", "checkbox");
-    inputRole.setAttribute("id", uniqueItems[j]);
-    inputRole.setAttribute("value", uniqueItems[j]);
+    let country = document.createElement("div");
+    let inputCountry = document.createElement("input");
+    inputCountry.setAttribute("type", "checkbox");
+    inputCountry.setAttribute("id", uniqueItems[j]);
+    inputCountry.setAttribute("value", uniqueItems[j]);
 
     // here a function that is called onchange is attached to each input of type checkbox
-    inputRole.onchange = function() {
+    inputCountry.onchange = function() {
       console.log("works");
-      filteredByRole(people);
+      filteredByCountry(data);
     };
 
-    let labelRole = document.createElement("label");
-    labelRole.setAttribute("for", uniqueItems[j]);
-    labelRole.innerText = uniqueItems[j];
-    role.append(inputRole, labelRole);
-    filterRole.append(role);
+    let labelCountry = document.createElement("label");
+    labelCountry.setAttribute("for", uniqueItems[j]);
+    labelCountry.innerText = uniqueItems[j];
+    country.append(inputCountry, labelCountry);
+    filterCountry.append(country);
   }
 }
 
@@ -152,24 +155,24 @@ function filteredPerson(array) {
   if (document.getElementById("filter_users").value !== "") {
     for (var i = 0; i < array.length; i++) {
       if (
-        array[i].name
+        array[i].firstname
           .toLowerCase()
           .trim()
           .includes(
             document
               .getElementById("filter_users")
               .value.toLowerCase()
-              .trim()
-          ) ||
-        array[i].contact_info.nickName
-          .toLowerCase()
-          .trim()
-          .includes(
-            document
-              .getElementById("filter_users")
-              .value.toLowerCase()
-              .trim()
-          )
+              .trim())
+        //   ) ||
+        // array[i].contact_info.nickName
+        //   .toLowerCase()
+        //   .trim()
+        //   .includes(
+        //     document
+        //       .getElementById("filter_users")
+        //       .value.toLowerCase()
+        //       .trim()
+        //   )
       ) {
         filtered.push(array[i]);
       }
@@ -182,11 +185,11 @@ function filteredPerson(array) {
   }
 }
 
-function filteredByRole(array) {
-  console.log("enters de filterbyrole function");
+function filteredByCountry(array) {
+  console.log("enters de filterbycountry function");
   let inputs = document.getElementsByTagName("input");
   let arrChecked = [];
-  let roleChecked = [];
+  let countryChecked = [];
   for (let i = 0; i < inputs.length; i++) {
     if (inputs[i].type === "checkbox" && inputs[i].checked) {
       arrChecked.push(inputs[i].value);
@@ -197,13 +200,13 @@ function filteredByRole(array) {
   if (arrChecked.length !== 0) {
     for (let k = 0; k < array.length; k++) {
       for (let j = 0; j < arrChecked.length; j++) {
-        if (array[k].role === arrChecked[j]) {
-          roleChecked.push(array[k]);
+        if (array[k].address.country === arrChecked[j]) {
+          countryChecked.push(array[k]);
         }
       }
     }
-    console.log(roleChecked);
-    filteredPerson(roleChecked);
+    console.log(countryChecked);
+    filteredPerson(countryChecked);
   } else {
     console.log(array);
     filteredPerson(array);
@@ -213,17 +216,16 @@ function filteredByRole(array) {
 function orderByAge(array) {
   console.log("enters order function");
   let selected = document.getElementById("order");
-  if (selected.value == "Descending") {
+  if (selected.value == "Ascending") {
     array.sort(function(a, b) {
-      return b.age - a.age;
+      return b.birthday.slice(0,4) - a.birthday.slice(0,4);
     });
-    console.log("descending", array);
+    
     fillTable(array);
-  } else if (selected.value == "Ascending") {
+  } else if (selected.value == "Descending") {
     array.sort(function(a, b) {
-      return a.age - b.age;
+      return a.birthday.slice(0,4) - b.birthday.slice(0,4);
     });
-    console.log("ascending", array);
     fillTable(array);
   } else {
     fillTable(array);
